@@ -1,49 +1,63 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <title>测试页面</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>山河桥语 - 中国古代桥梁时空数据可视化</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { 
-            background: #f0f0f0; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh;
-            font-family: Arial;
-        }
-        .box {
-            background: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        .error { color: red; margin-top: 20px; font-size: 14px; }
-        .success { color: green; }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      html, body {
+        height: 100%;
+        overflow: hidden;
+      }
+      
+      #app {
+        height: 100vh;
+        width: 100vw;
+      }
     </style>
-</head>
-<body>
-    <div class="box">
-        <h1>🌉 山河桥语</h1>
-        <p>服务器连接正常</p>
-        <div id="status" class="error">正在检测资源文件...</div>
-    </div>
-    
     <script>
-        // 检测资源文件是否存在
-        fetch('/project/assets/index-49c0ef96.js')
-            .then(r => r.ok ? Promise.resolve() : Promise.reject())
-            .then(() => {
-                document.getElementById('status').innerHTML = '✅ JS文件找到！可以加载正式版本了。<br>请恢复原来的 index.html 并确保路径正确。';
-                document.getElementById('status').className = 'success';
-            })
-            .catch(() => {
-                document.getElementById('status').innerHTML = '❌ 找不到 JS 文件<br>文件路径: /project/assets/index-49c0ef96.js<br><br>请检查：<br>1. project/assets/ 文件夹里是否有 index-49c0ef96.js<br>2. 文件名是否完全一致（包括版本号）';
-            });
-            
-        fetch('/project/assets/index-5ae3e8da.css')
-            .then(r => r.ok ? console.log('CSS found') : console.log('CSS missing'));
+      // 自动检测并修正资源路径
+      (function() {
+        // 获取当前脚本的路径
+        var scripts = document.getElementsByTagName('script');
+        var currentScript = scripts[scripts.length - 1];
+        var scriptSrc = currentScript.src;
+        
+        // 提取基础路径
+        var basePath = '';
+        if (scriptSrc && scriptSrc.includes('/project/')) {
+          basePath = '/project';
+        } else if (window.location.pathname.includes('/project/')) {
+          basePath = '/project';
+        }
+        
+        // 动态加载正确的 CSS 和 JS
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = basePath + '/assets/index-5ae3e8da.css';
+        document.head.appendChild(link);
+        
+        var script = document.createElement('script');
+        script.type = 'module';
+        script.crossOrigin = '';
+        script.src = basePath + '/assets/index-49c0ef96.js';
+        document.body.appendChild(script);
+        
+        // 如果有其他资源需要修正,可以在这里添加
+        console.log('资源加载路径:', basePath);
+      })();
     </script>
-</body>
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
 </html>
