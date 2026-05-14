@@ -1,130 +1,34 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>山河桥语 - 中国古代桥梁时空数据可视化（调试版）</title>
+    <title>山河桥语 - 中国古代桥梁时空数据可视化</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        html, body {
-            height: 100%;
-            overflow: hidden;
-        }
-        
-        #app {
-            height: 100vh;
-            width: 100vw;
-        }
-        
-        #debug-panel {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.8);
-            color: #0f0;
-            font-family: monospace;
-            font-size: 12px;
-            padding: 10px;
-            border-radius: 5px;
-            z-index: 9999;
-            max-width: 80%;
-            pointer-events: none;
-        }
-        
-        .error-log {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            background: rgba(255,0,0,0.9);
-            color: white;
-            font-family: monospace;
-            font-size: 12px;
-            padding: 10px;
-            border-radius: 5px;
-            z-index: 9999;
-            max-width: 90%;
-            white-space: pre-wrap;
-            pointer-events: none;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      html, body {
+        height: 100%;
+        overflow: hidden;
+      }
+      
+      #app {
+        height: 100vh;
+        width: 100vw;
+      }
     </style>
-</head>
-<body>
+<script type="module" crossorigin src="/assets/index-49c0ef96.js"></script>
+<link rel="stylesheet" href="/assets/index-5ae3e8da.css">
+  </head>
+  <body>
     <div id="app"></div>
-    <div id="debug-panel">状态: 加载中...</div>
-    <div id="error-log" class="error-log" style="display:none"></div>
     
-    <script>
-        // 全局错误捕获
-        window.onerror = function(msg, url, line, col, error) {
-            var errorDiv = document.getElementById('error-log');
-            var errorMsg = '错误: ' + msg + '\n位置: ' + url + ':' + line;
-            errorDiv.innerHTML = errorMsg;
-            errorDiv.style.display = 'block';
-            document.getElementById('debug-panel').innerHTML = '❌ 加载失败 - 查看左上角错误';
-            console.error(error);
-            return false;
-        };
-        
-        // 监听未捕获的 Promise 错误
-        window.addEventListener('unhandledrejection', function(event) {
-            var errorDiv = document.getElementById('error-log');
-            errorDiv.innerHTML = 'Promise错误: ' + event.reason;
-            errorDiv.style.display = 'block';
-            document.getElementById('debug-panel').innerHTML = '❌ Promise 错误';
-        });
-        
-        document.getElementById('debug-panel').innerHTML = '状态: 正在加载资源...';
-        
-        // 动态加载 CSS
-        var link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = '/project/assets/index-5ae3e8da.css';
-        link.onerror = function() {
-            document.getElementById('debug-panel').innerHTML = '❌ CSS 加载失败';
-        };
-        document.head.appendChild(link);
-        
-        // 动态加载 JS
-        var script = document.createElement('script');
-        script.type = 'module';
-        script.crossOrigin = '';
-        script.src = '/project/assets/index-49c0ef96.js';
-        script.onload = function() {
-            document.getElementById('debug-panel').innerHTML = '✅ JS 加载成功，等待 Vue 挂载...';
-            // 检查 Vue 是否成功挂载
-            setTimeout(function() {
-                var appDiv = document.getElementById('app');
-                if (appDiv && appDiv.children.length === 0) {
-                    document.getElementById('debug-panel').innerHTML = '⚠️ Vue 已加载但未挂载，可能缺少数据文件或组件出错';
-                    document.getElementById('debug-panel').style.background = 'rgba(255,165,0,0.8)';
-                } else if (appDiv && appDiv.children.length > 0) {
-                    document.getElementById('debug-panel').innerHTML = '🎉 Vue 应用已成功挂载！';
-                    document.getElementById('debug-panel').style.background = 'rgba(0,128,0,0.8)';
-                    setTimeout(function() {
-                        document.getElementById('debug-panel').style.opacity = '0.5';
-                    }, 3000);
-                }
-            }, 2000);
-        };
-        script.onerror = function() {
-            document.getElementById('debug-panel').innerHTML = '❌ JS 文件加载失败 (404)';
-            document.getElementById('error-log').innerHTML = 'JS文件不存在: /project/assets/index-49c0ef96.js\n请检查文件名是否一致';
-            document.getElementById('error-log').style.display = 'block';
-        };
-        document.body.appendChild(script);
-        
-        // 检查网络请求
-        setTimeout(function() {
-            console.log('调试信息: 页面已加载，等待Vue初始化');
-        }, 1000);
-    </script>
-</body>
+  </body>
 </html>
